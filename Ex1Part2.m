@@ -21,10 +21,10 @@ totalTime = 20;
 
 varCons = (0 : 1 : 20);
 varCons1 = (0 : 500 : 2000);
-hold on
 for k = 1 : 2
     if (k == 1); cons = varCons; else; cons = varCons1; end
     figure(k)
+    hold on
     for i = 1 : size(cons, 2) % CI_RNA
         for j = 1 : size(cons, 2) % CRO_RNA
             initCons = zeros(1, 4);
