@@ -17,7 +17,7 @@ CRO = 2;
 [omegaCI, muCI, omegaCro, muCro] = deal(50);
 [kCI, kCro] = deal(10);
 dt = 0.01;
-totalTime = 20;
+totalTime = 25;
 
 varCons = (0 : 1 : 20);
 varCons1 = (0 : 500 : 2000);
@@ -88,9 +88,9 @@ function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
     y = gen - deg;
 end
 
-function timeVsConcentrationSettings(figureNum, t)
+function molVsTimeSettings(figureNum, t)
     X_LABEL = "Time (s)";
-    Y_LABEL = "Concentration (mM)";
+    Y_LABEL = "Molecules";
     figure(figureNum);
     xlabel(X_LABEL);
     ylabel(Y_LABEL);

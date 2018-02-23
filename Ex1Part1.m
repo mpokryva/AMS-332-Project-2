@@ -34,7 +34,7 @@ for i = 1 : size(initCons, 1)
     plot(time, croProt);
     plot(time, croRna);
     hold off
-    timeVsConcentrationSettings(1, titles(i)) 
+    molVsTimeSettings(1, titles(i)) 
 end
 
 
@@ -84,9 +84,9 @@ function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
     y = gen - deg;
 end
 
-function timeVsConcentrationSettings(figureNum, t)
+function molVsTimeSettings(figureNum, t)
     X_LABEL = "Time (s)";
-    Y_LABEL = "Concentration (mM)";
+    Y_LABEL = "Molecules";
     figure(figureNum);
     xlabel(X_LABEL);
     ylabel(Y_LABEL);

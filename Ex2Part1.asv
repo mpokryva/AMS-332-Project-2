@@ -28,7 +28,7 @@ molVsTimeSettings(figureNum, "Exercise 2, Question 1")
 hold off
 
 % Part 2.
-figureNum = figureNum + 1;
+figureNum = 2;
 figure(figureNum);
 % 20 iterations of part 1.
 it = 20;
@@ -45,7 +45,7 @@ hold off
 molVsTimeSettings(figureNum, "Exercise 1, Question 2")
 
 % Phase plane.
-figureNum = figureNum + 1;
+figureNum = 3;
 figure(figureNum);
 hold on
 for i = 1 : it
@@ -56,27 +56,24 @@ end
 hold off 
 
 % Part 3
-figureNum = figureNum + 1;
+figureNum = 3;
 figure(figureNum);
 initCons = deal(zeros(2, 4));
 initCons(1,:) = [0, 20, 0, 0]; % cIRna = 20;
-initCons(2,:) = [0, 0, 0, 20]; % croRna = 20;
-titles = ["cIRna = 20", "croRna = 20"];
+initCons(1,:) = [0, 0, 0, 20]; % croRna = 20;
+
 for i = 1 : size(initCons, 1)
-    figure(figureNum);
     hold on
-    cons = initCons(i,:);
     for j = 1 : it
-        [time, cIProt, cIRna, croProt, croRna] = simulate(cons(1), cons(2), cons(2), ...
-         cons(3), steps);
+        [time, cIProt, cIRna, croProt, croRna] = simulate(initCIProt, initCIRna, initCroProt, ...
+         initCroRna, steps);
         plot(time, cIProt);
         plot(time, cIRna);
         plot(time, croProt);
         plot(time, croRna);
     end
-    molVsTimeSettings(figureNum, titles(i))
+    molVsTimeSettings(figureNum, t)
     hold off 
-    figureNum = figureNum + 1;
 end
 
 
