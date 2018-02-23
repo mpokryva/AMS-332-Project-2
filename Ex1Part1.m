@@ -15,7 +15,9 @@ CRO = 2;
 dt = 0.01;
 totalTime = 25;
 
-% All concentrations set to 0 %
+% Part 1
+figureNum = 1
+figure(figureNum)
 initCons = zeros(3, 4);
 initCons(1,:) = [0, 0, 0, 0];
 initCons(2,:) = [0, 0, 0, 20];
@@ -36,6 +38,29 @@ for i = 1 : size(initCons, 1)
     hold off
     molVsTimeSettings(1, titles(i)) 
 end
+
+% Part 2
+figureNum = figureNum + 1;
+varCons = (0 : 1 : 20);
+varCons1 = (0 : 500 : 2000);
+for k = 1 : 2
+    if (k == 1); cons = varCons; else; cons = varCons1; end
+    figure(figureNum);
+    hold on
+    for i = 1 : size(cons, 2) % CI_RNA
+        for j = 1 : size(cons, 2) % CRO_RNA
+            initCons = zeros(1, 4);
+            initCons(CI_RNA) = cons(i);
+            initCons(CRO_RNA) = cons(j);
+            [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
+                [chiCIProt, chiCIRna, chiCroProt chiCroRna], [omegaCI, omegaCro], ...
+                [muCI, muCro], [kCI, kCro]);
+                plot(cIProt, croProt);
+        end
+    end
+    figureNum = figureNum + 1;
+end
+
 
 
 function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...

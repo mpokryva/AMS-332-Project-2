@@ -15,7 +15,9 @@ CRO = 2;
 dt = 0.01;
 totalTime = 25;
 
-% All concentrations set to 0 %
+% Part 1
+figureNum = 1
+figure(figureNum)
 initCons = zeros(3, 4);
 initCons(1,:) = [0, 0, 0, 0];
 initCons(2,:) = [0, 0, 0, 20];
@@ -30,12 +32,34 @@ for i = 1 : size(initCons, 1)
     subplot(2, 2, i);
     hold on
     plot(time, cIProt);
-    plot(time, croProt);
     plot(time, cIRna);
+    plot(time, croProt);
     plot(time, croRna);
     hold off
-    timeVsConcentrationSettings(1, titles(i)) 
+    molVsTimeSettings(1, titles(i)) 
 end
+
+% Part 2
+figureNum = =
+varCons = (0 : 1 : 20);
+varCons1 = (0 : 500 : 2000);
+for k = 1 : 2
+    if (k == 1); cons = varCons; else; cons = varCons1; end
+    figure(k)
+    hold on
+    for i = 1 : size(cons, 2) % CI_RNA
+        for j = 1 : size(cons, 2) % CRO_RNA
+            initCons = zeros(1, 4);
+            initCons(CI_RNA) = cons(i);
+            initCons(CRO_RNA) = cons(j);
+            [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
+                [chiCIProt, chiCIRna, chiCroProt chiCroRna], [omegaCI, omegaCro], ...
+                [muCI, muCro], [kCI, kCro]);
+                plot(cIProt, croProt);
+        end
+    end
+end
+
 
 
 function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
@@ -69,7 +93,7 @@ function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt)
 end
 
 function y = dtCIRna(muCI, croProt, cIRna, kCro, chiCIRna)
-    gen = muCI * (1 - (croProt^2)/(kCro^2 + croProt^2));
+    gen = muCI * (1 - (croProt .^ 2)/(kCro .^ 2 + croProt .^ 2));
     deg = chiCIRna * cIRna;
     y = gen - deg;
 end
@@ -79,14 +103,14 @@ function y = dtCroProt(omegaCro, croProt, croRna, chiCroProt)
 end
 
 function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
-    gen = muCro * (1 - (cIProt^2)/(kCI^2 + cIProt^2));
+    gen = muCro * (1 - (cIProt .^ 2)/(kCI .^ 2 + cIProt .^ 2));
     deg = chiCroRna * croRna;
     y = gen - deg;
 end
 
-function timeVsConcentrationSettings(figureNum, t)
+function molVsTimeSettings(figureNum, t)
     X_LABEL = "Time (s)";
-    Y_LABEL = "Concentration (mM)";
+    Y_LABEL = "Molecules";
     figure(figureNum);
     xlabel(X_LABEL);
     ylabel(Y_LABEL);
