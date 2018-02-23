@@ -22,11 +22,10 @@ totalTime = 20;
     [muCI, muCro], [kCI, kCro]);
 hold on;
 plot(time, cIProt);
-plot(time, croProt);
-plot(time, cIRna);
-plot(time, croRna);
+%plot(time, croProt);
+%plot(time, cIRna);
+%plot(time, croRna);
 hold off
-timeVsConcentrationSettings(1, "cro and cI Concentrations vs Time")
 
 
 function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
@@ -45,10 +44,10 @@ function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, d
     time = zeros(1, totalTime/dt);
     % Forward Euler Algorithm
     for i = 1 : totalTime/dt    
-        cIProt(i+1) =  cIProt(i) + (dtCIProt(omegas(CI), cIProt(i), cIRna(i), chis(CI_PROT)) * dt);
+        cIProt(i+1) =  cIProt(i) + (dtCIProt(omega(CI), cIProt(i), cIRna(i), chis(CI_PROT)) * dt);
         cIRna(i+1) =  cIRna(i) + (dtCIRna(mus(CI), croProt(i), cIRna(i), ks(CRO), chis(CI_RNA)) * dt);
         croProt(i+1) = croProt(i) + (dtCroProt(omegas(CRO), croProt(i), croRna(i), chis(CRO_PROT)) * dt);
-        croRna(i+1) = croRna(i) + (dtCroRna(mus(CRO), cIProt(i), croRna(i), ks(CI), chis(CRO_RNA)) * dt);
+        croRna(i+1) = croRna(i) + (dtCroRna(mus(CRO), cIProt(i), croRna(i), ks(CRO), chis(CRO_RNA)) * dt);
         time(i+1) = time(i) + dt;
     end
 end
@@ -70,16 +69,5 @@ end
 function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
     y = muCro * (1 - ((cIProt .^ 2) / (kCI .^ 2 + cIProt .^ 2))) - (chiCroRna * croRna);
     %   y = mu * (1 - ((prot .^ 2) / (k .^ 2 + prot .^ 2))) - (chiRna * rna);
-end
-
-function timeVsConcentrationSettings(figureNum, t)
-    X_LABEL = "Time (s)";
-    Y_LABEL = "Concentration (mM)";
-    figure(figureNum);
-    xlabel(X_LABEL);
-    ylabel(Y_LABEL);
-    labels = ["cI Protein", "cI RNA", "cro Protein", "cro RNA"];
-    legend(labels);
-    title(t);
 end
 
