@@ -30,8 +30,8 @@ for i = 1 : size(initCons, 1)
     subplot(2, 2, i);
     hold on
     plot(time, cIProt);
-    plot(time, croProt);
     plot(time, cIRna);
+    plot(time, croProt);
     plot(time, croRna);
     hold off
     timeVsConcentrationSettings(1, titles(i)) 
@@ -69,7 +69,7 @@ function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt)
 end
 
 function y = dtCIRna(muCI, croProt, cIRna, kCro, chiCIRna)
-    gen = muCI * (1 - (croProt^2)/(kCro^2 + croProt^2));
+    gen = muCI * (1 - (croProt .^ 2)/(kCro .^ 2 + croProt .^ 2));
     deg = chiCIRna * cIRna;
     y = gen - deg;
 end
@@ -79,7 +79,7 @@ function y = dtCroProt(omegaCro, croProt, croRna, chiCroProt)
 end
 
 function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
-    gen = muCro * (1 - (cIProt^2)/(kCI^2 + cIProt^2));
+    gen = muCro * (1 - (cIProt .^ 2)/(kCI .^ 2 + cIProt .^ 2));
     deg = chiCroRna * croRna;
     y = gen - deg;
 end
