@@ -13,20 +13,29 @@ CRO = 2;
 [omegaCI, muCI, omegaCro, muCro] = deal(50);
 [kCI, kCro] = deal(10);
 dt = 0.01;
-totalTime = 20;
-
+totalTime = 25;
 
 % All concentrations set to 0 %
-[time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, ...
-    [0, 0, 0, 0], [chiCIProt, chiCIRna, chiCroProt chiCroRna], [omegaCI, omegaCro], ...
+initCons = zeros(3, 4);
+initCons(1,:) = [0, 0, 0, 0];
+initCons(2,:) = [0, 0, 0, 20];
+initCons(3,:) = [0, 50, 0, 0];
+titles = ["Initial concentrations = 0", "cro RNA = 20 molecules", "cI RNA = 50 molecules"];
+for i = 1 : size(initCons, 1)
+    [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, ...
+    initCons(i, :), [chiCIProt, chiCIRna, chiCroProt chiCroRna], [omegaCI, omegaCro], ...
     [muCI, muCro], [kCI, kCro]);
-hold on;
-plot(time, cIProt);
-plot(time, croProt);
-plot(time, cIRna);
-plot(time, croRna);
-hold off
-timeVsConcentrationSettings(1, "cro and cI Concentrations vs Time")
+
+
+    subplot(2, 2, i);
+    hold on
+    plot(time, cIProt);
+    plot(time, croProt);
+    plot(time, cIRna);
+    plot(time, croRna);
+    hold off
+    timeVsConcentrationSettings(1, titles(i)) 
+end
 
 
 function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
@@ -60,7 +69,9 @@ function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt)
 end
 
 function y = dtCIRna(muCI, croProt, cIRna, kCro, chiCIRna)
-    y = muCI * (1 - ((croProt .^ 2) / (kCro .^ 2 + croProt .^ 2))) - (chiCIRna * cIRna);
+    gen = muCI * (1 - (croProt^2)/(kCro^2 + croProt^2));
+    deg = chiCIRna * cIRna;
+    y = gen - deg;
 end
 
 function y = dtCroProt(omegaCro, croProt, croRna, chiCroProt)
@@ -68,8 +79,9 @@ function y = dtCroProt(omegaCro, croProt, croRna, chiCroProt)
 end
 
 function y = dtCroRna(muCro, cIProt, croRna, kCI, chiCroRna)
-    y = muCro * (1 - ((cIProt .^ 2) / (kCI .^ 2 + cIProt .^ 2))) - (chiCroRna * croRna);
-    %   y = mu * (1 - ((prot .^ 2) / (k .^ 2 + prot .^ 2))) - (chiRna * rna);
+    gen = muCro * (1 - (cIProt^2)/(kCI^2 + cIProt^2));
+    deg = chiCroRna * croRna;
+    y = gen - deg;
 end
 
 function timeVsConcentrationSettings(figureNum, t)
