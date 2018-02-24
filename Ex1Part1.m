@@ -16,7 +16,7 @@ dt = 0.01;
 totalTime = 25;
 
 % Part 1
-figureNum = 1
+figureNum = 1;
 figure(figureNum)
 initCons = zeros(3, 4);
 initCons(1,:) = [0, 0, 0, 0];
@@ -61,10 +61,30 @@ for k = 1 : 2
     figureNum = figureNum + 1;
 end
 
+% Part 4
+figureNum = figureNum + 1;
+figure(figureNum);
+initCon = [0, 50, 0, 0];
+degFactor = 3.9; % Degradation factor.
+[time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, ...
+initCon, [chiCIProt, chiCIRna, chiCroProt chiCroRna], [omegaCI, omegaCro], ...
+[muCI, muCro], [kCI, kCro], degFactor);
+
+hold on
+plot(time, cIProt);
+plot(time, cIRna);
+plot(time, croProt);
+plot(time, croRna);
+hold off
+molVsTimeSettings(figureNum, "Exercise 1 Part 4");
+
 
 
 function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, dt, initCons, ...
-    chis, omegas, mus, ks)
+    chis, omegas, mus, ks, degFactor)
+    if (nargin < 8)
+        degFactor = 1;
+    end
     CI_PROT = 1;
     CI_RNA = 2;
     CRO_PROT = 3;
@@ -79,7 +99,7 @@ function [time, cIProt, cIRna, croProt, croRna] = findConcentration(totalTime, d
     time = zeros(1, totalTime/dt);
     % Forward Euler Algorithm
     for i = 1 : totalTime/dt    
-        cIProt(i+1) =  cIProt(i) + (dtCIProt(omegas(CI), cIProt(i), cIRna(i), chis(CI_PROT)) * dt);
+        cIProt(i+1) =  cIProt(i) + (dtCIProt(omegas(CI), cIProt(i), cIRna(i), chis(CI_PROT), degFactor) * dt);
         cIRna(i+1) =  cIRna(i) + (dtCIRna(mus(CI), croProt(i), cIRna(i), ks(CRO), chis(CI_RNA)) * dt);
         croProt(i+1) = croProt(i) + (dtCroProt(omegas(CRO), croProt(i), croRna(i), chis(CRO_PROT)) * dt);
         croRna(i+1) = croRna(i) + (dtCroRna(mus(CRO), cIProt(i), croRna(i), ks(CI), chis(CRO_RNA)) * dt);
@@ -89,8 +109,11 @@ end
 
 
 
-function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt)
-    y = (omegaCI * cIRna) - (chiCIProt * cIProt);
+function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt, degFactor)
+    if (nargin < 5)
+       degFactor = 1; 
+    end
+    y = (omegaCI * cIRna) - degFactor * (chiCIProt * cIProt);
 end
 
 function y = dtCIRna(muCI, croProt, cIRna, kCro, chiCIRna)
@@ -118,5 +141,13 @@ function molVsTimeSettings(figureNum, t)
     labels = ["cI Protein", "cI RNA", "cro Protein", "cro RNA"];
     legend(labels);
     title(t);
+end
+
+function setLabels(figureNum)
+     X_LABEL = "Time (s)";
+    Y_LABEL = "Molecules";
+    figure(figureNum);
+    xlabel(X_LABEL);
+    ylabel(Y_LABEL);
 end
 

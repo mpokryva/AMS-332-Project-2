@@ -16,7 +16,7 @@ dt = 0.01;
 totalTime = 25;
 
 % Part 1
-figureNum = 1
+figureNum = 1;
 figure(figureNum)
 initCons = zeros(3, 4);
 initCons(1,:) = [0, 0, 0, 0];
@@ -40,12 +40,12 @@ for i = 1 : size(initCons, 1)
 end
 
 % Part 2
-figureNum = =
+figureNum = figureNum + 1;
 varCons = (0 : 1 : 20);
 varCons1 = (0 : 500 : 2000);
 for k = 1 : 2
     if (k == 1); cons = varCons; else; cons = varCons1; end
-    figure(k)
+    figure(figureNum);
     hold on
     for i = 1 : size(cons, 2) % CI_RNA
         for j = 1 : size(cons, 2) % CRO_RNA
@@ -58,7 +58,11 @@ for k = 1 : 2
                 plot(cIProt, croProt);
         end
     end
+    figureNum = figureNum + 1;
 end
+
+% Part 4
+
 
 
 
@@ -88,8 +92,9 @@ end
 
 
 
-function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt)
-    y = (omegaCI * cIRna) - (chiCIProt * cIProt);
+function y = dtCIProt(omegaCI, cIProt, cIRna, chiCIProt, degFactor)
+    if 
+    y = (omegaCI * cIRna) - degFactor * (chiCIProt * cIProt);
 end
 
 function y = dtCIRna(muCI, croProt, cIRna, kCro, chiCIRna)
